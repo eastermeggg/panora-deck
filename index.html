@@ -1,0 +1,815 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=1920">
+  <title>Panora — Sales Deck</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=DM+Serif+Display&display=swap" rel="stylesheet">
+  <style>
+/* ========== DESIGN TOKENS ========== */
+:root {
+  --color-dark: #0A1A12;
+  --color-dark-card: #142E21;
+  --color-light: #FAF8F4;
+  --color-light-2: #F0EDE8;
+  --color-green: #1E7A4E;
+  --color-green-light: #28A066;
+  --color-cream: #FAF8F4;
+  --color-text-muted: #8A9A8F;
+  --color-text-dark: #1A1A1A;
+  --color-text-dark-muted: #5A6B60;
+  --card-border: rgba(30, 122, 78, 0.18);
+  --slide-w: 1920px;
+  --slide-h: 1080px;
+  --font-heading: "DM Serif Display", Georgia, serif;
+  --font-body: "DM Sans", "Helvetica Neue", sans-serif;
+}
+
+/* ========== RESET ========== */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  background: #080808;
+  font-family: var(--font-body);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ========== SLIDE BASE ========== */
+.slide {
+  position: relative;
+  width: var(--slide-w);
+  height: var(--slide-h);
+  overflow: hidden;
+  padding: 72px 96px;
+  display: flex;
+  flex-direction: column;
+}
+.slide--dark { background-color: var(--color-dark); color: var(--color-cream); }
+.slide--light { background-color: var(--color-light); color: var(--color-text-dark); }
+
+/* ========== AURORA GRADIENT (dark slides) ========== */
+.has-aurora::before {
+  content: "";
+  position: absolute;
+  inset: -30%;
+  z-index: 0;
+  opacity: 0.55;
+  filter: blur(140px);
+  background:
+    radial-gradient(ellipse 650px 520px at 12% 18%, rgba(255,140,50,0.38), transparent 70%),
+    radial-gradient(ellipse 520px 620px at 78% 12%, rgba(220,80,120,0.32), transparent 70%),
+    radial-gradient(ellipse 720px 420px at 65% 82%, rgba(40,180,160,0.28), transparent 70%),
+    radial-gradient(ellipse 520px 520px at 22% 78%, rgba(60,100,220,0.22), transparent 70%);
+  pointer-events: none;
+}
+.has-aurora > * { position: relative; z-index: 1; }
+
+/* ========== CONCENTRIC CIRCLES (light slides) ========== */
+.has-circles::after {
+  content: "";
+  position: absolute;
+  width: 900px;
+  height: 900px;
+  border-radius: 50%;
+  z-index: 0;
+  pointer-events: none;
+  right: -250px;
+  bottom: -250px;
+  border: 1px solid rgba(30,122,78,0.07);
+  box-shadow:
+    inset 0 0 0 70px transparent, inset 0 0 0 71px rgba(30,122,78,0.06),
+    inset 0 0 0 140px transparent, inset 0 0 0 141px rgba(30,122,78,0.05),
+    inset 0 0 0 210px transparent, inset 0 0 0 211px rgba(30,122,78,0.04),
+    inset 0 0 0 280px transparent, inset 0 0 0 281px rgba(30,122,78,0.035),
+    inset 0 0 0 350px transparent, inset 0 0 0 351px rgba(30,122,78,0.03);
+}
+.has-circles > * { position: relative; z-index: 1; }
+.has-circles--left::after { right: auto; bottom: auto; left: -250px; top: -250px; }
+
+/* ========== LOGO ========== */
+.logo { display: inline-flex; align-items: center; gap: 10px; }
+.logo__text { font-family: var(--font-heading); font-size: 26px; letter-spacing: 0.02em; }
+.slide--dark .logo { color: var(--color-cream); }
+.slide--light .logo { color: var(--color-green); }
+.logo--large .logo__text { font-size: 36px; }
+.logo--large svg { width: 44px; height: 44px; }
+
+/* ========== TAG ========== */
+.tag {
+  display: inline-block;
+  font-family: var(--font-body);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 6px 16px;
+  border-radius: 100px;
+  margin-bottom: 20px;
+}
+.slide--dark .tag { background: rgba(30,122,78,0.18); color: var(--color-green-light); }
+.slide--light .tag { background: rgba(30,122,78,0.10); color: var(--color-green); }
+
+/* ========== CARDS ========== */
+.card {
+  background: var(--color-dark-card);
+  border: 1px solid var(--card-border);
+  border-radius: 16px;
+  padding: 32px;
+}
+.card--light {
+  background: #fff;
+  border: 1px solid rgba(0,0,0,0.06);
+  border-radius: 16px;
+  padding: 32px;
+  box-shadow: 0 2px 16px rgba(0,0,0,0.04);
+}
+.card--green-left {
+  border-left: 4px solid var(--color-green);
+}
+
+/* ========== FOOTER ========== */
+.slide-footer {
+  position: absolute;
+  bottom: 36px;
+  left: 96px;
+  right: 96px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  z-index: 2;
+}
+.slide-footer .logo__text { font-size: 18px; }
+.slide-footer svg { width: 24px; height: 24px; }
+.slide-footer .slide-num {
+  font-family: var(--font-body);
+  font-size: 14px;
+  opacity: 0.5;
+}
+
+/* ========== GREEN BAR ========== */
+.green-bar {
+  border-left: 4px solid var(--color-green);
+  padding-left: 24px;
+}
+
+/* ========== CTA BUTTON ========== */
+.cta {
+  display: inline-block;
+  font-family: var(--font-body);
+  font-size: 16px;
+  font-weight: 600;
+  color: #fff;
+  background: var(--color-green);
+  padding: 16px 36px;
+  border-radius: 100px;
+  text-decoration: none;
+  letter-spacing: 0.01em;
+}
+
+/* ========== TYPOGRAPHY HELPERS ========== */
+.text-green { color: var(--color-green-light); }
+.text-green-dark { color: var(--color-green); }
+.text-muted { color: var(--color-text-muted); }
+.text-muted-dark { color: var(--color-text-dark-muted); }
+.text-cream { color: var(--color-cream); }
+.font-heading { font-family: var(--font-heading); font-weight: 400; }
+.font-body { font-family: var(--font-body); }
+
+/* ========== LAYOUT HELPERS ========== */
+.split {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 64px;
+  flex: 1;
+  align-items: start;
+}
+.split--40-60 { grid-template-columns: 2fr 3fr; }
+.split--45-55 { grid-template-columns: 45fr 55fr; }
+.vcenter { display: flex; flex-direction: column; justify-content: center; }
+
+/* ========== SCREEN LAYOUT ========== */
+@media screen {
+  body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 48px;
+    padding: 48px 0;
+  }
+  .slide {
+    box-shadow: 0 12px 48px rgba(0,0,0,0.4);
+    flex-shrink: 0;
+  }
+}
+
+/* ========== PRINT ========== */
+@media print {
+  body { background: none; margin: 0; padding: 0; }
+  @page { size: 1920px 1080px; margin: 0; }
+  .slide {
+    break-after: page;
+    break-inside: avoid;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+    color-adjust: exact;
+    box-shadow: none;
+  }
+  .slide:last-child { break-after: auto; }
+}
+
+
+/* ==================================================================
+   SLIDE-SPECIFIC STYLES
+   ================================================================== */
+
+/* --- S1 COVER --- */
+#slide-01 .cover-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  max-width: 900px;
+}
+#slide-01 h1 { font-family: var(--font-heading); font-size: 68px; line-height: 1.08; margin-bottom: 28px; color: var(--color-cream); }
+#slide-01 .subtitle { font-size: 18px; color: var(--color-text-muted); line-height: 1.6; margin-bottom: 44px; max-width: 520px; }
+
+/* --- S2 CONTEXTE --- */
+#slide-02 .left-col h2 { font-family: var(--font-heading); font-size: 32px; line-height: 1.25; color: var(--color-green); margin-bottom: 0; }
+#slide-02 .constat-card { margin-bottom: 24px; }
+#slide-02 .constat-card h4 { font-family: var(--font-body); font-weight: 700; font-size: 14px; text-transform: uppercase; letter-spacing: 0.06em; color: var(--color-text-dark); margin-bottom: 8px; }
+#slide-02 .constat-card p { font-size: 15px; color: var(--color-text-dark-muted); line-height: 1.55; }
+#slide-02 .problem-row {
+  display: flex; align-items: flex-start; gap: 16px; padding: 18px 0;
+  border-bottom: 1px solid rgba(0,0,0,0.06);
+}
+#slide-02 .problem-row:last-child { border-bottom: none; }
+#slide-02 .problem-icon {
+  width: 36px; height: 36px; border-radius: 50%; background: rgba(30,122,78,0.12);
+  display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+  color: var(--color-green); font-size: 14px; font-weight: 700;
+}
+#slide-02 .problem-row strong { font-size: 15px; color: var(--color-text-dark); display: block; margin-bottom: 2px; }
+#slide-02 .problem-row span { font-size: 14px; color: var(--color-text-dark-muted); }
+
+/* --- S3 PROMESSE --- */
+#slide-03 .left-col h2 { font-family: var(--font-heading); font-size: 42px; line-height: 1.15; margin-bottom: 24px; }
+#slide-03 .agents-grid {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 16px;
+}
+#slide-03 .agent-pill {
+  background: #fff; border-radius: 14px; padding: 20px 22px;
+  display: flex; align-items: center; gap: 14px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.04);
+  font-size: 15px; font-weight: 500; color: var(--color-text-dark);
+}
+#slide-03 .agent-pill .emoji { font-size: 22px; }
+
+/* --- S4 MISSION --- */
+#slide-04 .mission-content {
+  flex: 1; display: flex; flex-direction: column; justify-content: center;
+  max-width: 1100px;
+}
+#slide-04 h1 { font-family: var(--font-heading); font-size: 52px; line-height: 1.15; margin-bottom: 32px; }
+#slide-04 .mission-sub { font-size: 18px; color: var(--color-text-muted); line-height: 1.6; max-width: 700px; }
+
+/* --- S5 ETAPES --- */
+#slide-05 .left-col h2 { font-family: var(--font-heading); font-size: 36px; line-height: 1.2; }
+#slide-05 .steps { display: flex; flex-direction: column; gap: 0; }
+#slide-05 .step-card {
+  background: #fff; border-radius: 14px; padding: 28px 30px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.04);
+  display: flex; align-items: flex-start; gap: 18px;
+}
+#slide-05 .step-emoji { font-size: 26px; flex-shrink: 0; margin-top: 2px; }
+#slide-05 .step-card h4 { font-size: 16px; font-weight: 700; color: var(--color-text-dark); margin-bottom: 4px; }
+#slide-05 .step-card p { font-size: 14px; color: var(--color-text-dark-muted); line-height: 1.5; }
+#slide-05 .step-arrow {
+  display: flex; justify-content: center; padding: 8px 0; color: var(--color-green); font-size: 20px; opacity: 0.5;
+}
+
+/* --- S6 SOLUTIONS --- */
+#slide-06 .left-col h2 { font-family: var(--font-heading); font-size: 34px; line-height: 1.2; }
+#slide-06 .solutions-grid {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 18px;
+}
+#slide-06 .sol-card {
+  background: #fff; border-radius: 14px; padding: 26px 28px;
+  border-left: 4px solid var(--color-green);
+  box-shadow: 0 2px 12px rgba(0,0,0,0.04);
+}
+#slide-06 .sol-card .sol-icon { font-size: 24px; margin-bottom: 10px; }
+#slide-06 .sol-card h4 { font-size: 15px; font-weight: 700; color: var(--color-text-dark); margin-bottom: 6px; }
+#slide-06 .sol-card p { font-size: 13px; color: var(--color-text-dark-muted); line-height: 1.5; }
+
+/* --- S7 PROCESS --- */
+#slide-07 .left-col h2 { font-family: var(--font-heading); font-size: 28px; line-height: 1.25; margin-bottom: 32px; }
+#slide-07 .numbered-steps { display: flex; flex-direction: column; gap: 0; position: relative; padding-left: 48px; }
+#slide-07 .numbered-steps::before {
+  content: ""; position: absolute; left: 17px; top: 18px; bottom: 18px;
+  width: 2px; background: var(--color-green); opacity: 0.3;
+}
+#slide-07 .nstep {
+  display: flex; align-items: center; gap: 18px; padding: 16px 0; position: relative;
+}
+#slide-07 .nstep-num {
+  position: absolute; left: -48px;
+  width: 36px; height: 36px; border-radius: 50%; background: var(--color-green);
+  color: #fff; font-size: 14px; font-weight: 700;
+  display: flex; align-items: center; justify-content: center;
+}
+#slide-07 .nstep span { font-size: 15px; color: var(--color-text-dark); }
+#slide-07 .screenshot-placeholder {
+  background: var(--color-light-2); border-radius: 16px;
+  display: flex; align-items: center; justify-content: center;
+  min-height: 500px; border: 1px solid rgba(0,0,0,0.06);
+  color: var(--color-text-dark-muted); font-size: 14px;
+}
+
+/* --- S8 SECURITE --- */
+#slide-08 h2 { font-family: var(--font-heading); font-size: 32px; line-height: 1.2; margin-bottom: 48px; }
+#slide-08 .sec-grid {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px;
+}
+#slide-08 .sec-card {
+  background: var(--color-dark-card); border: 1px solid var(--card-border);
+  border-radius: 16px; padding: 32px;
+}
+#slide-08 .sec-card .sec-icon { font-size: 28px; margin-bottom: 16px; }
+#slide-08 .sec-card h4 { font-family: var(--font-body); font-weight: 700; font-size: 16px; color: var(--color-cream); margin-bottom: 10px; }
+#slide-08 .sec-card p { font-size: 14px; color: var(--color-text-muted); line-height: 1.55; }
+
+/* --- S9 PRICING --- */
+#slide-09 h2 { font-family: var(--font-heading); font-size: 34px; line-height: 1.2; margin-bottom: 48px; }
+#slide-09 .pricing-grid {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 28px; flex: 1; align-items: start;
+}
+#slide-09 .price-card {
+  background: var(--color-dark-card); border: 1px solid var(--card-border);
+  border-radius: 20px; padding: 40px 36px; display: flex; flex-direction: column;
+}
+#slide-09 .price-card h3 { font-family: var(--font-heading); font-size: 24px; color: var(--color-cream); margin-bottom: 16px; }
+#slide-09 .price-card .price { font-family: var(--font-heading); font-size: 44px; color: var(--color-green-light); margin-bottom: 4px; }
+#slide-09 .price-card .price-sub { font-size: 13px; color: var(--color-text-muted); margin-bottom: 24px; }
+#slide-09 .price-card .duration { font-size: 14px; color: var(--color-text-muted); margin-bottom: 24px; padding-bottom: 24px; border-bottom: 1px solid var(--card-border); }
+#slide-09 .price-card ul { list-style: none; }
+#slide-09 .price-card li { font-size: 14px; color: var(--color-text-muted); padding: 8px 0; padding-left: 24px; position: relative; line-height: 1.5; }
+#slide-09 .price-card li::before { content: "✓"; position: absolute; left: 0; color: var(--color-green-light); font-weight: 700; }
+
+/* --- S10 SOCIAL PROOF --- */
+#slide-10 h2 { font-family: var(--font-heading); font-size: 34px; margin-bottom: 40px; }
+#slide-10 .testimonials { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-bottom: 48px; }
+#slide-10 .testi-card {
+  background: #fff; border-radius: 16px; padding: 32px;
+  box-shadow: 0 2px 16px rgba(0,0,0,0.04);
+}
+#slide-10 .testi-card blockquote {
+  font-family: var(--font-heading); font-size: 17px; color: var(--color-text-dark);
+  line-height: 1.45; margin-bottom: 16px; font-style: italic;
+}
+#slide-10 .testi-card cite { font-family: var(--font-body); font-size: 13px; color: var(--color-text-dark-muted); font-style: normal; }
+#slide-10 .logos-row { display: flex; gap: 20px; }
+#slide-10 .logo-placeholder {
+  flex: 1; height: 56px; background: var(--color-light-2); border-radius: 12px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 13px; color: var(--color-text-dark-muted); font-weight: 500;
+}
+
+/* --- S11 STATS --- */
+#slide-11 { justify-content: center; }
+#slide-11 h2 { font-family: var(--font-heading); font-size: 38px; margin-bottom: 64px; }
+#slide-11 .stats-list { display: flex; flex-direction: column; }
+#slide-11 .stat-row {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 28px 0; border-bottom: 1px solid rgba(30,122,78,0.25);
+}
+#slide-11 .stat-row:last-child { border-bottom: none; }
+#slide-11 .stat-label { font-size: 16px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--color-text-muted); }
+#slide-11 .stat-value { font-family: var(--font-heading); font-size: 56px; color: var(--color-green-light); }
+
+/* --- S12 CLOSING --- */
+#slide-12 .closing-content { flex: 1; display: flex; flex-direction: column; justify-content: center; max-width: 1100px; }
+#slide-12 h1 { font-family: var(--font-heading); font-size: 40px; line-height: 1.2; margin-bottom: 20px; }
+#slide-12 .closing-sub { font-family: var(--font-heading); font-size: 26px; line-height: 1.35; margin-bottom: 0; }
+#slide-12 .bottom-bar {
+  position: absolute; bottom: 72px; left: 96px; right: 96px;
+  display: flex; align-items: center; gap: 48px;
+  padding-top: 28px; border-top: 1px solid rgba(30,122,78,0.3);
+  z-index: 2;
+}
+#slide-12 .team-member { font-size: 15px; color: var(--color-text-muted); }
+#slide-12 .team-member strong { color: var(--color-cream); }
+#slide-12 .contact-block { margin-left: auto; text-align: right; }
+#slide-12 .contact-block .tag { margin-bottom: 8px; }
+#slide-12 .contact-block .email { font-family: var(--font-heading); font-size: 22px; color: var(--color-cream); }
+
+/* --- S13 & S14 BLANKS --- */
+#slide-13 h2, #slide-14 h2 { font-family: var(--font-heading); font-size: 44px; line-height: 1.15; margin-bottom: 20px; }
+#slide-13 p { font-size: 16px; color: var(--color-text-muted); }
+#slide-14 p { font-size: 16px; color: var(--color-text-dark-muted); }
+
+  </style>
+</head>
+<body>
+
+<!-- ==================== SLIDE 1 — COVER ==================== -->
+<section class="slide slide--dark has-aurora" id="slide-01">
+  <div class="logo">
+  <svg viewBox="0 0 48 48" width="32" height="32" fill="none"><line x1="24" y1="24" x2="24" y2="4" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/><line x1="24" y1="24" x2="24" y2="44" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/><line x1="24" y1="24" x2="6.7" y2="14" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/><line x1="24" y1="24" x2="41.3" y2="34" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/><line x1="24" y1="24" x2="41.3" y2="14" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/><line x1="24" y1="24" x2="6.7" y2="34" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/><circle cx="24" cy="4" r="3.5" fill="currentColor"/><circle cx="24" cy="44" r="3.5" fill="currentColor"/><circle cx="6.7" cy="14" r="3.5" fill="currentColor"/><circle cx="41.3" cy="34" r="3.5" fill="currentColor"/><circle cx="41.3" cy="14" r="3.5" fill="currentColor"/><circle cx="6.7" cy="34" r="3.5" fill="currentColor"/></svg>
+  <span class="logo__text">Panora</span>
+</div>
+  <div class="cover-content">
+    <h1>Voir plus loin,<br>décider mieux.</h1>
+    <p class="subtitle">La plateforme IA conçue pour les courtiers en assurance.</p>
+    <div><span class="cta">Planifier une démo &rarr;</span></div>
+  </div>
+    <div class="slide-footer">
+    <div class="logo">
+  <svg viewBox="0 0 48 48" width="24" height="24" fill="none"><line x1="24" y1="24" x2="24" y2="4" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/><line x1="24" y1="24" x2="24" y2="44" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/><line x1="24" y1="24" x2="6.7" y2="14" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/><line x1="24" y1="24" x2="41.3" y2="34" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/><line x1="24" y1="24" x2="41.3" y2="14" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/><line x1="24" y1="24" x2="6.7" y2="34" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/><circle cx="24" cy="4" r="3.5" fill="currentColor"/><circle cx="24" cy="44" r="3.5" fill="currentColor"/><circle cx="6.7" cy="14" r="3.5" fill="currentColor"/><circle cx="41.3" cy="34" r="3.5" fill="currentColor"/><circle cx="41.3" cy="14" r="3.5" fill="currentColor"/><circle cx="6.7" cy="34" r="3.5" fill="currentColor"/></svg>
+  <span class="logo__text">Panora</span>
+</div>
+    <span class="slide-num">1</span>
+  </div>
+</section>
+
+<!-- ==================== SLIDE 2 — CONTEXTE ==================== -->
+<section class="slide slide--light has-circles has-circles--left" id="slide-02">
+  <div class="split split--40-60" style="flex:1; align-items: center;">
+    <div class="left-col vcenter">
+      <span class="tag">Contexte</span>
+      <h2>Face aux tâches manuelles, données dispersées et risques de conformité, l&rsquo;IA optimise l&rsquo;efficacité des cabinets.</h2>
+    </div>
+    <div class="right-col">
+      <div class="card--light constat-card">
+        <h4>Constat</h4>
+        <p>Équipes surchargées par des tâches manuelles répétitives (réconciliation, relances).</p>
+        <h4 style="margin-top:16px;">Enjeux critiques</h4>
+        <p>L&rsquo;efficacité opérationnelle et la conformité sont essentielles.</p>
+      </div>
+      <span class="tag">Problématiques identifiées</span>
+      <div class="card--light" style="padding:16px 28px;">
+        <div class="problem-row">
+          <div class="problem-icon">&times;</div>
+          <div><strong>Coûts élevés</strong><span>Traitements manuels chronophages et coûteux</span></div>
+        </div>
+        <div class="problem-row">
+          <div class="problem-icon">&times;</div>
+          <div><strong>Risques accrus</strong><span>Erreurs et défaillances de conformité</span></div>
+        </div>
+        <div class="problem-row">
+          <div class="problem-icon">&times;</div>
+          <div><strong>Coordination difficile</strong><span>Entre back-office, conformité, relation client</span></div>
+        </div>
+        <div class="problem-row">
+          <div class="problem-icon">&times;</div>
+          <div><strong>Complexité des données</strong><span>Volume et diversité en explosion</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+    <div class="slide-footer">
+    <div class="logo">
+  <svg viewBox="0 0 48 48" width="24" height="24" fill="none"><line x1="24" y1="24" x2="24" y2="4" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/><line x1="24" y1="24" x2="24" y2="44" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/><line x1="24" y1="24" x2="6.7" y2="14" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/><line x1="24" y1="24" x2="41.3" y2="34" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/><line x1="24" y1="24" x2="41.3" y2="14" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/><line x1="24" y1="24" x2="6.7" y2="34" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/><circle cx="24" cy="4" r="3.5" fill="currentColor"/><circle cx="24" cy="44" r="3.5" fill="currentColor"/><circle cx="6.7" cy="14" r="3.5" fill="currentColor"/><circle cx="41.3" cy="34" r="3.5" fill="currentColor"/><circle cx="41.3" cy="14" r="3.5" fill="currentColor"/><circle cx="6.7" cy="34" r="3.5" fill="currentColor"/></svg>
+  <span class="logo__text">Panora</span>
+</div>
+    <span class="slide-num">2</span>
+  </div>
+</section>
+
+<!-- ==================== SLIDE 3 — PROMESSE ==================== -->
+<section class="slide slide--light has-circles" id="slide-03">
+  <div class="split split--45-55" style="flex:1; align-items: center;">
+    <div class="left-col vcenter">
+      <span class="tag">Promesse</span>
+      <h2>L&rsquo;IA au service du courtage à grande échelle</h2>
+      <div class="green-bar" style="margin-top:24px;">
+        <p class="text-muted-dark" style="font-size:16px; line-height:1.6;">Des solutions d&rsquo;IA sur mesure pour automatiser vos workflows et accélérer votre performance.</p>
+      </div>
+    </div>
+    <div class="right-col" style="background: linear-gradient(135deg, rgba(30,122,78,0.04), rgba(30,122,78,0.01)); border-radius: 24px; padding: 36px;">
+      <div class="agents-grid">
+        <div class="agent-pill"><span class="emoji">🔍</span> Agent Prospection</div>
+        <div class="agent-pill"><span class="emoji">✏️</span> Agent Prise de Note</div>
+        <div class="agent-pill"><span class="emoji">🛡️</span> Agent Conformité</div>
+        <div class="agent-pill"><span class="emoji">📊</span> Agent Comparateur</div>
+        <div class="agent-pill"><span class="emoji">💬</span> Agent Support</div>
+        <div class="agent-pill"><span class="emoji">📋</span> Agent Cotation</div>
+        <div class="agent-pill"><span class="emoji">🔄</span> Agent Réconciliation</div>
+        <div class="agent-pill"><span class="emoji">📝</span> Agent Résiliation</div>
+      </div>
+    </div>
+  </div>
+    <div class="slide-footer">
+    <div class="logo">
+  <svg viewBox="0 0 48 48" width="24" height="24" fill="none"><line x1="24" y1="24" x2="24" y2="4" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/><line x1="24" y1="24" x2="24" y2="44" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/><line x1="24" y1="24" x2="6.7" y2="14" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/><line x1="24" y1="24" x2="41.3" y2="34" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/><line x1="24" y1="24" x2="41.3" y2="14" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/><line x1="24" y1="24" x2="6.7" y2="34" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/><circle cx="24" cy="4" r="3.5" fill="currentColor"/><circle cx="24" cy="44" r="3.5" fill="currentColor"/><circle cx="6.7" cy="14" r="3.5" fill="currentColor"/><circle cx="41.3" cy="34" r="3.5" fill="currentColor"/><circle cx="41.3" cy="14" r="3.5" fill="currentColor"/><circle cx="6.7" cy="34" r="3.5" fill="currentColor"/></svg>
+  <span class="logo__text">Panora</span>
+</div>
+    <span class="slide-num">3</span>
+  </div>
+</section>
+
+<!-- ==================== SLIDE 4 — MISSION ==================== -->
+<section class="slide slide--dark has-aurora" id="slide-04">
+  <div class="logo">
+  <svg viewBox="0 0 48 48" width="32" height="32" fill="none"><line x1="24" y1="24" x2="24" y2="4" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/><line x1="24" y1="24" x2="24" y2="44" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/><line x1="24" y1="24" x2="6.7" y2="14" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/><line x1="24" y1="24" x2="41.3" y2="34" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/><line x1="24" y1="24" x2="41.3" y2="14" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/><line x1="24" y1="24" x2="6.7" y2="34" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/><circle cx="24" cy="4" r="3.5" fill="currentColor"/><circle cx="24" cy="44" r="3.5" fill="currentColor"/><circle cx="6.7" cy="14" r="3.5" fill="currentColor"/><circle cx="41.3" cy="34" r="3.5" fill="currentColor"/><circle cx="41.3" cy="14" r="3.5" fill="currentColor"/><circle cx="6.7" cy="34" r="3.5" fill="currentColor"/></svg>
+  <span class="logo__text">Panora</span>
+</div>
+  <div class="mission-content">
+    <span class="tag">Notre mission</span>
+    <h1>Créer des environnements IA <span class="text-green">adaptés</span> à votre organisation</h1>
+    <div class="green-bar mission-sub">
+      <p>Pour renforcer la productivité, la conformité et la satisfaction client de manière durable.</p>
+    </div>
+  </div>
+    <div class="slide-footer">
+    <div class="logo">
+  <svg viewBox="0 0 48 48" width="24" height="24" fill="none"><line x1="24" y1="24" x2="24" y2="4" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/><line x1="24" y1="24" x2="24" y2="44" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/><line x1="24" y1="24" x2="6.7" y2="14" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/><line x1="24" y1="24" x2="41.3" y2="34" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/><line x1="24" y1="24" x2="41.3" y2="14" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/><line x1="24" y1="24" x2="6.7" y2="34" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/><circle cx="24" cy="4" r="3.5" fill="currentColor"/><circle cx="24" cy="44" r="3.5" fill="currentColor"/><circle cx="6.7" cy="14" r="3.5" fill="currentColor"/><circle cx="41.3" cy="34" r="3.5" fill="currentColor"/><circle cx="41.3" cy="14" r="3.5" fill="currentColor"/><circle cx="6.7" cy="34" r="3.5" fill="currentColor"/></svg>
+  <span class="logo__text">Panora</span>
+</div>
+    <span class="slide-num">4</span>
+  </div>
+</section>
+
+<!-- ==================== SLIDE 5 — ETAPES ==================== -->
+<section class="slide slide--light has-circles" id="slide-05">
+  <div class="split split--40-60" style="flex:1; align-items: center;">
+    <div class="left-col vcenter">
+      <span class="tag">Notre accompagnement</span>
+      <h2>Ce que nous proposons</h2>
+    </div>
+    <div class="right-col">
+      <div class="steps">
+      <div class="step-card">
+        <span class="step-emoji">🔍</span>
+        <div><h4>Audit des workflows</h4><p>Identification des goulots d'étranglement existants</p></div>
+      </div>
+      <div class="step-arrow">&#8595;</div>
+      <div class="step-card">
+        <span class="step-emoji">⚡</span>
+        <div><h4>Automatisation</h4><p>Automatisation ciblée de vos tâches chronophages</p></div>
+      </div>
+      <div class="step-arrow">&#8595;</div>
+      <div class="step-card">
+        <span class="step-emoji">🤖</span>
+        <div><h4>Déploiement d'agents</h4><p>Agents IA intégrés (CRM, GED, ERP, Outlook etc.)</p></div>
+      </div>
+      <div class="step-arrow">&#8595;</div>
+      <div class="step-card">
+        <span class="step-emoji">🎯</span>
+        <div><h4>Personnalisation complète</h4><p>Logique métier et règles de décision sur mesure</p></div>
+      </div>
+      </div>
+    </div>
+  </div>
+    <div class="slide-footer">
+    <div class="logo">
+  <svg viewBox="0 0 48 48" width="24" height="24" fill="none"><line x1="24" y1="24" x2="24" y2="4" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/><line x1="24" y1="24" x2="24" y2="44" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/><line x1="24" y1="24" x2="6.7" y2="14" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/><line x1="24" y1="24" x2="41.3" y2="34" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/><line x1="24" y1="24" x2="41.3" y2="14" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/><line x1="24" y1="24" x2="6.7" y2="34" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/><circle cx="24" cy="4" r="3.5" fill="currentColor"/><circle cx="24" cy="44" r="3.5" fill="currentColor"/><circle cx="6.7" cy="14" r="3.5" fill="currentColor"/><circle cx="41.3" cy="34" r="3.5" fill="currentColor"/><circle cx="41.3" cy="14" r="3.5" fill="currentColor"/><circle cx="6.7" cy="34" r="3.5" fill="currentColor"/></svg>
+  <span class="logo__text">Panora</span>
+</div>
+    <span class="slide-num">5</span>
+  </div>
+</section>
+
+<!-- ==================== SLIDE 6 — SOLUTIONS ==================== -->
+<section class="slide slide--light has-circles has-circles--left" id="slide-06">
+  <div class="split split--40-60" style="flex:1; align-items: center;">
+    <div class="left-col vcenter">
+      <span class="tag">Nos solutions</span>
+      <h2>Exemples d&rsquo;utilisation IA</h2>
+    </div>
+    <div class="right-col">
+      <div class="solutions-grid">
+        <div class="sol-card"><div class="sol-icon">📋</div><h4>Assistant collecte</h4><p>IA de collecte pour la souscription et la conformité.</p></div>
+        <div class="sol-card"><div class="sol-icon">🔍</div><h4>Comparateur intelligent</h4><p>Interfacé avec vos assureurs partenaires.</p></div>
+        <div class="sol-card"><div class="sol-icon">🔄</div><h4>Assistant réconciliation</h4><p>IA de relance impayés et réconciliation comptable.</p></div>
+        <div class="sol-card"><div class="sol-icon">🛡️</div><h4>Assistant conformité</h4><p>IA vérifiant les statuts réglementaires.</p></div>
+        <div class="sol-card"><div class="sol-icon">📊</div><h4>Reportings automatiques</h4><p>Génération automatique de reportings et KPIs.</p></div>
+      </div>
+    </div>
+  </div>
+    <div class="slide-footer">
+    <div class="logo">
+  <svg viewBox="0 0 48 48" width="24" height="24" fill="none"><line x1="24" y1="24" x2="24" y2="4" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/><line x1="24" y1="24" x2="24" y2="44" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/><line x1="24" y1="24" x2="6.7" y2="14" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/><line x1="24" y1="24" x2="41.3" y2="34" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/><line x1="24" y1="24" x2="41.3" y2="14" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/><line x1="24" y1="24" x2="6.7" y2="34" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/><circle cx="24" cy="4" r="3.5" fill="currentColor"/><circle cx="24" cy="44" r="3.5" fill="currentColor"/><circle cx="6.7" cy="14" r="3.5" fill="currentColor"/><circle cx="41.3" cy="34" r="3.5" fill="currentColor"/><circle cx="41.3" cy="14" r="3.5" fill="currentColor"/><circle cx="6.7" cy="34" r="3.5" fill="currentColor"/></svg>
+  <span class="logo__text">Panora</span>
+</div>
+    <span class="slide-num">6</span>
+  </div>
+</section>
+
+<!-- ==================== SLIDE 7 — PROCESS ==================== -->
+<section class="slide slide--light has-circles" id="slide-07">
+  <div class="split" style="flex:1; align-items: center;">
+    <div class="left-col vcenter">
+      <span class="tag">Notre accompagnement</span>
+      <h2>Nous définissons ensemble les agents dont vous avez besoin</h2>
+      <div class="numbered-steps">
+        <div class="nstep"><div class="nstep-num">1</div><span>Audit de vos process existants</span></div>
+        <div class="nstep"><div class="nstep-num">2</div><span>Automatisation ciblée</span></div>
+        <div class="nstep"><div class="nstep-num">3</div><span>Déploiement d&rsquo;agents IA intégrés</span></div>
+        <div class="nstep"><div class="nstep-num">4</div><span>Personnalisation de la logique métier</span></div>
+      </div>
+    </div>
+    <div class="right-col" style="display:flex; flex-direction:column;">
+      <span class="tag">Exemple de cockpit configuré</span>
+      <div class="screenshot-placeholder" style="flex:1;">
+        Capture d&rsquo;écran de la plateforme
+      </div>
+    </div>
+  </div>
+    <div class="slide-footer">
+    <div class="logo">
+  <svg viewBox="0 0 48 48" width="24" height="24" fill="none"><line x1="24" y1="24" x2="24" y2="4" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/><line x1="24" y1="24" x2="24" y2="44" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/><line x1="24" y1="24" x2="6.7" y2="14" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/><line x1="24" y1="24" x2="41.3" y2="34" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/><line x1="24" y1="24" x2="41.3" y2="14" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/><line x1="24" y1="24" x2="6.7" y2="34" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/><circle cx="24" cy="4" r="3.5" fill="currentColor"/><circle cx="24" cy="44" r="3.5" fill="currentColor"/><circle cx="6.7" cy="14" r="3.5" fill="currentColor"/><circle cx="41.3" cy="34" r="3.5" fill="currentColor"/><circle cx="41.3" cy="14" r="3.5" fill="currentColor"/><circle cx="6.7" cy="34" r="3.5" fill="currentColor"/></svg>
+  <span class="logo__text">Panora</span>
+</div>
+    <span class="slide-num">7</span>
+  </div>
+</section>
+
+<!-- ==================== SLIDE 8 — SECURITE ==================== -->
+<section class="slide slide--dark" id="slide-08">
+  <span class="tag">Une solution sécurisée et conforme</span>
+  <h2>Le choix d&rsquo;une solution sécurisée, conforme et pensée pour l&rsquo;excellence</h2>
+  <div class="sec-grid" style="flex:1; align-content: start;">
+    <div class="sec-card"><div class="sec-icon">🤝</div><h4>Vous gardez le contrôle</h4><p>L'IA vous assiste mais ne prend jamais la main.</p></div>
+        <div class="sec-card"><div class="sec-icon">🇪🇺</div><h4>Vos données en Europe</h4><p>Serveurs européens certifiés, conformes RGPD.</p></div>
+        <div class="sec-card"><div class="sec-icon">🛡️</div><h4>Sécurisé et compliant</h4><p>Exigences DDA et RGPD. Traitements chiffrés.</p></div>
+        <div class="sec-card"><div class="sec-icon">✅</div><h4>Service client 24/7</h4><p>Équipes techniques et support IA en continu.</p></div>
+        <div class="sec-card"><div class="sec-icon">📦</div><h4>Pas d'entraînement sur vos données</h4><p>Documents confidentiels et isolés.</p></div>
+  </div>
+    <div class="slide-footer">
+    <div class="logo">
+  <svg viewBox="0 0 48 48" width="24" height="24" fill="none"><line x1="24" y1="24" x2="24" y2="4" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/><line x1="24" y1="24" x2="24" y2="44" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/><line x1="24" y1="24" x2="6.7" y2="14" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/><line x1="24" y1="24" x2="41.3" y2="34" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/><line x1="24" y1="24" x2="41.3" y2="14" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/><line x1="24" y1="24" x2="6.7" y2="34" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/><circle cx="24" cy="4" r="3.5" fill="currentColor"/><circle cx="24" cy="44" r="3.5" fill="currentColor"/><circle cx="6.7" cy="14" r="3.5" fill="currentColor"/><circle cx="41.3" cy="34" r="3.5" fill="currentColor"/><circle cx="41.3" cy="14" r="3.5" fill="currentColor"/><circle cx="6.7" cy="34" r="3.5" fill="currentColor"/></svg>
+  <span class="logo__text">Panora</span>
+</div>
+    <span class="slide-num">8</span>
+  </div>
+</section>
+
+<!-- ==================== SLIDE 9 — PRICING ==================== -->
+<section class="slide slide--dark has-aurora" id="slide-09">
+  <span class="tag">Offres et tarifications</span>
+  <h2>Nos formules d&rsquo;accompagnement</h2>
+  <div class="pricing-grid">
+    <div class="price-card">
+      <h3>Formule Pilote</h3>
+      <div class="price">4 900&euro;</div>
+      <div class="price-sub">HT &middot; À partir de</div>
+      <div class="duration">Durée : 3 mois</div>
+      <ul>
+        <li>POC (Preuve de Concept)</li>
+        <li>Déploiement sur 1 à 2 assistants IA</li>
+        <li>Accompagnement dédié</li>
+      </ul>
+    </div>
+    <div class="price-card">
+      <h3>Formule Transformation</h3>
+      <div class="price">9 500&euro;</div>
+      <div class="price-sub">HT &middot; À partir de</div>
+      <div class="duration">Durée : 6-12 mois</div>
+      <ul>
+        <li>Déploiement multi-workflows</li>
+        <li>Intégration CRM / ERP</li>
+        <li>Support prioritaire</li>
+      </ul>
+    </div>
+    <div class="price-card">
+      <h3>Formule Entreprise+</h3>
+      <div class="price">Sur devis</div>
+      <div class="price-sub">&nbsp;</div>
+      <div class="duration">Durée : sur mesure</div>
+      <ul>
+        <li>Déploiement IA étendue</li>
+        <li>Gouvernance de données</li>
+        <li>Conseil conformité</li>
+        <li>Architecture dédiée</li>
+      </ul>
+    </div>
+  </div>
+    <div class="slide-footer">
+    <div class="logo">
+  <svg viewBox="0 0 48 48" width="24" height="24" fill="none"><line x1="24" y1="24" x2="24" y2="4" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/><line x1="24" y1="24" x2="24" y2="44" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/><line x1="24" y1="24" x2="6.7" y2="14" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/><line x1="24" y1="24" x2="41.3" y2="34" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/><line x1="24" y1="24" x2="41.3" y2="14" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/><line x1="24" y1="24" x2="6.7" y2="34" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/><circle cx="24" cy="4" r="3.5" fill="currentColor"/><circle cx="24" cy="44" r="3.5" fill="currentColor"/><circle cx="6.7" cy="14" r="3.5" fill="currentColor"/><circle cx="41.3" cy="34" r="3.5" fill="currentColor"/><circle cx="41.3" cy="14" r="3.5" fill="currentColor"/><circle cx="6.7" cy="34" r="3.5" fill="currentColor"/></svg>
+  <span class="logo__text">Panora</span>
+</div>
+    <span class="slide-num">9</span>
+  </div>
+</section>
+
+<!-- ==================== SLIDE 10 — SOCIAL PROOF ==================== -->
+<section class="slide slide--light has-circles" id="slide-10">
+  <span class="tag">Références</span>
+  <h2>Ils nous font déjà confiance</h2>
+  <div class="testimonials">
+    <div class="testi-card"><blockquote>&laquo;&nbsp;Panora a transformé notre façon de gérer les cotations. Un gain de temps phénoménal.&nbsp;&raquo;</blockquote><cite>— Marie D., Cabinet MDA</cite></div>
+        <div class="testi-card"><blockquote>&laquo;&nbsp;L'IA est bluffante de précision. Adopté en quelques jours.&nbsp;&raquo;</blockquote><cite>— Thomas L., Assurances TLB</cite></div>
+        <div class="testi-card"><blockquote>&laquo;&nbsp;La conformité automatisée nous a libéré d'un stress constant.&nbsp;&raquo;</blockquote><cite>— Sophie R., Courtage SRG</cite></div>
+        <div class="testi-card"><blockquote>&laquo;&nbsp;ROI visible dès le premier mois. Panora est indispensable.&nbsp;&raquo;</blockquote><cite>— Pierre M., Groupe PM</cite></div>
+  </div>
+  <div class="logos-row">
+    <div class="logo-placeholder">Cabinet A</div>
+        <div class="logo-placeholder">Groupe B</div>
+        <div class="logo-placeholder">Assurance C</div>
+        <div class="logo-placeholder">Courtier D</div>
+        <div class="logo-placeholder">Mutuelle E</div>
+        <div class="logo-placeholder">Réseau F</div>
+  </div>
+    <div class="slide-footer">
+    <div class="logo">
+  <svg viewBox="0 0 48 48" width="24" height="24" fill="none"><line x1="24" y1="24" x2="24" y2="4" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/><line x1="24" y1="24" x2="24" y2="44" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/><line x1="24" y1="24" x2="6.7" y2="14" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/><line x1="24" y1="24" x2="41.3" y2="34" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/><line x1="24" y1="24" x2="41.3" y2="14" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/><line x1="24" y1="24" x2="6.7" y2="34" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/><circle cx="24" cy="4" r="3.5" fill="currentColor"/><circle cx="24" cy="44" r="3.5" fill="currentColor"/><circle cx="6.7" cy="14" r="3.5" fill="currentColor"/><circle cx="41.3" cy="34" r="3.5" fill="currentColor"/><circle cx="41.3" cy="14" r="3.5" fill="currentColor"/><circle cx="6.7" cy="34" r="3.5" fill="currentColor"/></svg>
+  <span class="logo__text">Panora</span>
+</div>
+    <span class="slide-num">10</span>
+  </div>
+</section>
+
+<!-- ==================== SLIDE 11 — STATS ==================== -->
+<section class="slide slide--dark" id="slide-11">
+  <div class="logo">
+  <svg viewBox="0 0 48 48" width="32" height="32" fill="none"><line x1="24" y1="24" x2="24" y2="4" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/><line x1="24" y1="24" x2="24" y2="44" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/><line x1="24" y1="24" x2="6.7" y2="14" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/><line x1="24" y1="24" x2="41.3" y2="34" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/><line x1="24" y1="24" x2="41.3" y2="14" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/><line x1="24" y1="24" x2="6.7" y2="34" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/><circle cx="24" cy="4" r="3.5" fill="currentColor"/><circle cx="24" cy="44" r="3.5" fill="currentColor"/><circle cx="6.7" cy="14" r="3.5" fill="currentColor"/><circle cx="41.3" cy="34" r="3.5" fill="currentColor"/><circle cx="41.3" cy="14" r="3.5" fill="currentColor"/><circle cx="6.7" cy="34" r="3.5" fill="currentColor"/></svg>
+  <span class="logo__text">Panora</span>
+</div>
+  <h2 style="margin-top:32px;">Des résultats concrets.</h2>
+  <div class="stats-list">
+    <div class="stat-row"><span class="stat-label">Temps administratif réduit</span><span class="stat-value">50%</span></div>
+      <div class="stat-row"><span class="stat-label">Productivité par collaborateur</span><span class="stat-value">+30%</span></div>
+      <div class="stat-row"><span class="stat-label">Satisfaction clients</span><span class="stat-value">93%</span></div>
+      <div class="stat-row"><span class="stat-label">Mise en service moyenne</span><span class="stat-value">8-10 jours</span></div>
+  </div>
+    <div class="slide-footer">
+    <div class="logo">
+  <svg viewBox="0 0 48 48" width="24" height="24" fill="none"><line x1="24" y1="24" x2="24" y2="4" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/><line x1="24" y1="24" x2="24" y2="44" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/><line x1="24" y1="24" x2="6.7" y2="14" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/><line x1="24" y1="24" x2="41.3" y2="34" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/><line x1="24" y1="24" x2="41.3" y2="14" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/><line x1="24" y1="24" x2="6.7" y2="34" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/><circle cx="24" cy="4" r="3.5" fill="currentColor"/><circle cx="24" cy="44" r="3.5" fill="currentColor"/><circle cx="6.7" cy="14" r="3.5" fill="currentColor"/><circle cx="41.3" cy="34" r="3.5" fill="currentColor"/><circle cx="41.3" cy="14" r="3.5" fill="currentColor"/><circle cx="6.7" cy="34" r="3.5" fill="currentColor"/></svg>
+  <span class="logo__text">Panora</span>
+</div>
+    <span class="slide-num">11</span>
+  </div>
+</section>
+
+<!-- ==================== SLIDE 12 — CLOSING ==================== -->
+<section class="slide slide--dark has-aurora" id="slide-12">
+  <div class="logo logo--large">
+  <svg viewBox="0 0 48 48" width="44" height="44" fill="none"><line x1="24" y1="24" x2="24" y2="4" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/><line x1="24" y1="24" x2="24" y2="44" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/><line x1="24" y1="24" x2="6.7" y2="14" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/><line x1="24" y1="24" x2="41.3" y2="34" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/><line x1="24" y1="24" x2="41.3" y2="14" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/><line x1="24" y1="24" x2="6.7" y2="34" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/><circle cx="24" cy="4" r="3.5" fill="currentColor"/><circle cx="24" cy="44" r="3.5" fill="currentColor"/><circle cx="6.7" cy="14" r="3.5" fill="currentColor"/><circle cx="41.3" cy="34" r="3.5" fill="currentColor"/><circle cx="41.3" cy="14" r="3.5" fill="currentColor"/><circle cx="6.7" cy="34" r="3.5" fill="currentColor"/></svg>
+  <span class="logo__text">Panora</span>
+</div>
+  <div class="closing-content">
+    <h1>Panora s&rsquo;intègre dans vos systèmes pour devenir le <span class="text-green">moteur IA</span> de votre transformation digitale.</h1>
+    <p class="closing-sub"><span class="text-green">Vous gardez la maîtrise</span> ; nous apportons <span class="text-green">l&rsquo;intelligence opérationnelle.</span></p>
+  </div>
+  <div class="bottom-bar">
+    <div class="team-member">👤 <strong>Nom Prénom</strong> — CEO &amp; Co-fondateur&middot;ice</div>
+    <div class="team-member">👤 <strong>Nom Prénom</strong> — CTO &amp; Co-fondateur&middot;ice</div>
+    <div class="contact-block">
+      <span class="tag">Contactez-nous</span>
+      <div class="email">hello@panora.fr</div>
+    </div>
+  </div>
+    <div class="slide-footer">
+    <div class="logo">
+  <svg viewBox="0 0 48 48" width="24" height="24" fill="none"><line x1="24" y1="24" x2="24" y2="4" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/><line x1="24" y1="24" x2="24" y2="44" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/><line x1="24" y1="24" x2="6.7" y2="14" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/><line x1="24" y1="24" x2="41.3" y2="34" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/><line x1="24" y1="24" x2="41.3" y2="14" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/><line x1="24" y1="24" x2="6.7" y2="34" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/><circle cx="24" cy="4" r="3.5" fill="currentColor"/><circle cx="24" cy="44" r="3.5" fill="currentColor"/><circle cx="6.7" cy="14" r="3.5" fill="currentColor"/><circle cx="41.3" cy="34" r="3.5" fill="currentColor"/><circle cx="41.3" cy="14" r="3.5" fill="currentColor"/><circle cx="6.7" cy="34" r="3.5" fill="currentColor"/></svg>
+  <span class="logo__text">Panora</span>
+</div>
+    <span class="slide-num">12</span>
+  </div>
+</section>
+
+<!-- ==================== SLIDE 13 — BLANK DARK ==================== -->
+<section class="slide slide--dark has-aurora" id="slide-13">
+  <div class="logo">
+  <svg viewBox="0 0 48 48" width="32" height="32" fill="none"><line x1="24" y1="24" x2="24" y2="4" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/><line x1="24" y1="24" x2="24" y2="44" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/><line x1="24" y1="24" x2="6.7" y2="14" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/><line x1="24" y1="24" x2="41.3" y2="34" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/><line x1="24" y1="24" x2="41.3" y2="14" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/><line x1="24" y1="24" x2="6.7" y2="34" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/><circle cx="24" cy="4" r="3.5" fill="currentColor"/><circle cx="24" cy="44" r="3.5" fill="currentColor"/><circle cx="6.7" cy="14" r="3.5" fill="currentColor"/><circle cx="41.3" cy="34" r="3.5" fill="currentColor"/><circle cx="41.3" cy="14" r="3.5" fill="currentColor"/><circle cx="6.7" cy="34" r="3.5" fill="currentColor"/></svg>
+  <span class="logo__text">Panora</span>
+</div>
+  <div style="flex:1; display:flex; flex-direction:column; justify-content:center;">
+    <span class="tag">Section</span>
+    <h2>Titre de la slide</h2>
+    <p style="margin-top:16px;">Contenu placeholder.</p>
+  </div>
+    <div class="slide-footer">
+    <div class="logo">
+  <svg viewBox="0 0 48 48" width="24" height="24" fill="none"><line x1="24" y1="24" x2="24" y2="4" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/><line x1="24" y1="24" x2="24" y2="44" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/><line x1="24" y1="24" x2="6.7" y2="14" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/><line x1="24" y1="24" x2="41.3" y2="34" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/><line x1="24" y1="24" x2="41.3" y2="14" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/><line x1="24" y1="24" x2="6.7" y2="34" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/><circle cx="24" cy="4" r="3.5" fill="currentColor"/><circle cx="24" cy="44" r="3.5" fill="currentColor"/><circle cx="6.7" cy="14" r="3.5" fill="currentColor"/><circle cx="41.3" cy="34" r="3.5" fill="currentColor"/><circle cx="41.3" cy="14" r="3.5" fill="currentColor"/><circle cx="6.7" cy="34" r="3.5" fill="currentColor"/></svg>
+  <span class="logo__text">Panora</span>
+</div>
+    <span class="slide-num">13</span>
+  </div>
+</section>
+
+<!-- ==================== SLIDE 14 — BLANK LIGHT ==================== -->
+<section class="slide slide--light has-circles" id="slide-14">
+  <div class="logo">
+  <svg viewBox="0 0 48 48" width="32" height="32" fill="none"><line x1="24" y1="24" x2="24" y2="4" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/><line x1="24" y1="24" x2="24" y2="44" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/><line x1="24" y1="24" x2="6.7" y2="14" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/><line x1="24" y1="24" x2="41.3" y2="34" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/><line x1="24" y1="24" x2="41.3" y2="14" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/><line x1="24" y1="24" x2="6.7" y2="34" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/><circle cx="24" cy="4" r="3.5" fill="currentColor"/><circle cx="24" cy="44" r="3.5" fill="currentColor"/><circle cx="6.7" cy="14" r="3.5" fill="currentColor"/><circle cx="41.3" cy="34" r="3.5" fill="currentColor"/><circle cx="41.3" cy="14" r="3.5" fill="currentColor"/><circle cx="6.7" cy="34" r="3.5" fill="currentColor"/></svg>
+  <span class="logo__text">Panora</span>
+</div>
+  <div style="flex:1; display:flex; flex-direction:column; justify-content:center;">
+    <span class="tag">Section</span>
+    <h2>Titre de la slide</h2>
+    <p style="margin-top:16px;">Contenu placeholder.</p>
+  </div>
+    <div class="slide-footer">
+    <div class="logo">
+  <svg viewBox="0 0 48 48" width="24" height="24" fill="none"><line x1="24" y1="24" x2="24" y2="4" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/><line x1="24" y1="24" x2="24" y2="44" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/><line x1="24" y1="24" x2="6.7" y2="14" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/><line x1="24" y1="24" x2="41.3" y2="34" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/><line x1="24" y1="24" x2="41.3" y2="14" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/><line x1="24" y1="24" x2="6.7" y2="34" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/><circle cx="24" cy="4" r="3.5" fill="currentColor"/><circle cx="24" cy="44" r="3.5" fill="currentColor"/><circle cx="6.7" cy="14" r="3.5" fill="currentColor"/><circle cx="41.3" cy="34" r="3.5" fill="currentColor"/><circle cx="41.3" cy="14" r="3.5" fill="currentColor"/><circle cx="6.7" cy="34" r="3.5" fill="currentColor"/></svg>
+  <span class="logo__text">Panora</span>
+</div>
+    <span class="slide-num">14</span>
+  </div>
+</section>
+
+</body>
+</html>

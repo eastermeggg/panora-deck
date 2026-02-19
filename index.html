@@ -2,7 +2,7 @@
 <html lang="fr">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=1920">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Panora — Sales Deck</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -195,12 +195,13 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 48px;
-    padding: 48px 0;
+    gap: 0;
+    padding: 0;
   }
   .slide {
-    box-shadow: 0 12px 48px rgba(0,0,0,0.4);
+    box-shadow: 0 4px 32px rgba(0,0,0,0.35);
     flex-shrink: 0;
+    transform-origin: top center;
   }
 }
 
@@ -811,5 +812,21 @@ body {
   </div>
 </section>
 
+<script>
+(function(){
+  var slides = document.querySelectorAll('.slide');
+  function resize(){
+    var s = window.innerWidth / 1920;
+    var gap = 24 * s;
+    slides.forEach(function(el){
+      el.style.transform = 'scale(' + s + ')';
+      el.style.marginBottom = -(1080 * (1 - s)) + gap + 'px';
+    });
+    document.body.style.paddingTop = gap + 'px';
+  }
+  resize();
+  window.addEventListener('resize', resize);
+})();
+</script>
 </body>
 </html>
